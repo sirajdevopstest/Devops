@@ -20,12 +20,18 @@ jobs:
         docker build -t ${{ secrets.DOCKER_USERNAME }}/nodejs-app .
         docker push ${{ secrets.DOCKER_USERNAME }}/nodejs-app
 
+    - name: Write SSH key and set permission (Optional)
+      run: |
+        echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
+        chmod 400 key.pem
+
     - name: SSH to SERVER and Deploy
       uses: appleboy/ssh-action@v1.0.0
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_SSH_KEY }}
+        port: 22
         script: |
           docker pull ${{ secrets.DOCKER_USERNAME }}/nodejs-app
           docker stop nodes-app || true
