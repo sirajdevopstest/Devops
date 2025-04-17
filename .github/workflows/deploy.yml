@@ -35,5 +35,5 @@ jobs:
         script: |
           docker pull ${{ secrets.DOCKER_USERNAME }}/nodejs-app
           docker stop nodes-app || true
-          docker rm nodejs-app || true
+          docker rm -f nodejs-app || true
           docker run -d --name nodejs-app -p 4000:4000 ${{ secrets.DOCKER_USERNAME }}/nodejs-app
